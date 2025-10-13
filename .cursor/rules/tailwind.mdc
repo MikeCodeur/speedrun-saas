@@ -1,0 +1,40 @@
+---
+globs: *.tsx,*.css
+description: Règle d’usage Tailwind (v4+ compatible v5) alignée avec la config Next actuelle
+---
+
+# Ligne directrice Tailwind (compatible v4/v5) pour ce projet
+
+Cette règle décrit comment utiliser Tailwind de manière cohérente avec la configuration actuelle du projet (Next 15, Tailwind CSS v4, stylage via variables CSS et `@theme inline`) tout en restant compatible avec Tailwind v5.
+
+## Fichiers de référence
+- Style global et thème: [src/app/globals.css](mdc:src/app/globals.css)
+- Layout et polices: [src/app/layout.tsx](mdc:src/app/layout.tsx)
+- Config Next: [next.config.ts](mdc:next.config.ts)
+
+## Principes de thème et couleurs
+- Le thème clair/sombre est piloté par variables CSS dans `:root` via `prefers-color-scheme` dans [globals.css](mdc:src/app/globals.css). Préférer l’usage de `var(--background)` / `var(--foreground)` ou des alias exposés par `@theme inline` plutôt que des couleurs codées en dur lorsqu’approprié.
+- Pour les éléments décoratifs exigeant un rendu précis (ex. gradients aurora), l’utilisation ponctuelle de couleurs hex dans les classes utilitaires est acceptée, mais privilégier les tokens du thème lorsqu’ils existent.
+
+## Utilisation Tailwind v4+ (compatible v5)
+- Utiliser les utilitaires Tailwind directement dans les `className` (pas de CSS-in-JS). Le projet utilise `@theme inline` dans [globals.css](mdc:src/app/globals.css), ce qui est compatible avec l’évolution v4→v5.
+- Préférer les utilitaires standard Tailwind (espacements, grilles, typographie, états `hover:`/`focus:`) avant d’ajouter des styles personnalisés.
+- Ne pas créer de configuration Tailwind additionnelle si l’objectif est atteignable via utilitaires existants et les variables CSS déjà en place.
+
+## Accessibilité et UX
+- Garantir un contraste suffisant en mode sombre; vérifier la lisibilité sur fond `--background`.
+- Conserver l’accessibilité clavier (focus visible) et les rôles ARIA pertinents. Utiliser les utilitaires d’état pour renforcer focus/hover.
+
+## Next.js et navigation
+- Pour les liens internes, utiliser `Link` de Next au lieu de `<a>` (voir [layout.tsx](mdc:src/app/layout.tsx) pour le contexte global). Les liens externes peuvent rester en `<a>` avec `rel`/`target` adaptés.
+
+## Polices et rendu
+- Les polices sont injectées via `next/font` dans [layout.tsx](mdc:src/app/layout.tsx). Conserver `antialiased` et les variables de police (`--font-geist-*`).
+
+## Performances
+- Préférer les utilitaires Tailwind aux classes personnalisées lourdes; limiter les ombres/blur très coûteux sur mobile.
+- Grouper les sections dans des conteneurs `max-w-*` et `px-*` pour des mises en page responsives et stables.
+
+## Quand ajouter du style personnalisé
+- Si un besoin n’est pas couvert par les utilitaires Tailwind, ajouter un style local minimal dans un fichier CSS de portée adaptée, tout en respectant les variables de thème pour conserver la cohérence clair/sombre.
+
