@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Button } from '@/components/ui/Button'
 
 export default function Page() {
   // console.log(name)
@@ -57,18 +57,16 @@ export default function Page() {
               </p>
             </div>
             <div className="flex gap-3">
-              <a
+              <Button
+                label="Nous écrire"
+                variant="primary"
                 href="mailto:contact@example.com"
-                className="inline-flex items-center justify-center rounded-lg bg-white text-black px-4 py-2 text-sm font-medium transition hover:bg-white/90"
-              >
-                Nous écrire
-              </a>
-              <Link
+              />
+              <Button
+                label="Découvrir le produit"
+                variant="secondary"
                 href="/"
-                className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-transparent px-4 py-2 text-sm font-medium text-white hover:bg-white/10"
-              >
-                Découvrir le produit
-              </Link>
+              />
             </div>
           </div>
         </div>

@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/Button'
+
 export type TermsSection = {
   id: string
   title: string

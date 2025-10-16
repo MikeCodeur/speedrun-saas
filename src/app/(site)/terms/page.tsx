@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { termsSections, termsUpdatedAt } from './data'
+import { Button } from '@/components/ui/Button'
 
 export const metadata = {
   title: 'Conditions d’utilisation',
@@ -41,6 +42,15 @@ export default function TermsPage() {
         <a className="underline" href="mailto:legal@example.com">
           legal@example.com
         </a>
+      </div>
+
+      <div className="flex gap-3">
+        <Button
+          label="Nous écrire"
+          variant="primary"
+          href="mailto:contact@example.com"
+        />
+        <Button label="Découvrir le produit" variant="secondary" href="/" />
       </div>
 
       <div className="mt-8">
