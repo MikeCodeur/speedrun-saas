@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { termsSections, termsUpdatedAt } from "./data";
+import Link from 'next/link'
+import { termsSections, termsUpdatedAt } from './data'
 
 export const metadata = {
-  title: "Conditions d’utilisation",
-  description: "Conditions générales d’utilisation du service my-saas",
-};
+  title: 'Conditions d’utilisation',
+  description: 'Conditions générales d’utilisation du service my-saas',
+}
 
 export default function TermsPage() {
   return (
@@ -13,12 +13,14 @@ export default function TermsPage() {
         <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
           Conditions d’utilisation
         </h1>
-        <span className="text-xs text-white/60">Mise à jour: {termsUpdatedAt}</span>
+        <span className="text-xs text-white/60">
+          Mise à jour: {termsUpdatedAt}
+        </span>
       </div>
 
       <p className="mt-4 text-white/70">
-        Merci d’utiliser my-saas. Veuillez lire attentivement ces conditions. En utilisant
-        le service, vous acceptez ces termes.
+        Merci d’utiliser my-saas. Veuillez lire attentivement ces conditions. En
+        utilisant le service, vous acceptez ces termes.
       </p>
 
       <div className="mt-8 space-y-8">
@@ -35,16 +37,20 @@ export default function TermsPage() {
       </div>
 
       <div className="mt-12 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/70">
-        En cas de question, contactez-nous: <a className="underline" href="mailto:legal@example.com">legal@example.com</a>
+        En cas de question, contactez-nous:{' '}
+        <a className="underline" href="mailto:legal@example.com">
+          legal@example.com
+        </a>
       </div>
 
       <div className="mt-8">
-        <Link href="/" className="text-sm text-white/80 underline hover:text-white">
+        <Link
+          href="/"
+          className="text-sm text-white/80 underline hover:text-white"
+        >
           Retour à l’accueil
         </Link>
       </div>
     </div>
-  );
+  )
 }
-
-

@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from 'next/link'
 
 export default function SiteLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <div className="min-h-screen">
@@ -34,7 +34,5 @@ export default function SiteLayout({
         </div>
       </footer>
     </div>
-  );
+  )
 }
-
-
