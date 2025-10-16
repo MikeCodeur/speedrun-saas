@@ -57,16 +57,8 @@ export default function Page() {
               </p>
             </div>
             <div className="flex gap-3">
-              <Button
-                label="Nous écrire"
-                variant="primary"
-                href="mailto:contact@example.com"
-              />
-              <Button
-                label="Découvrir le produit"
-                variant="secondary"
-                href="/"
-              />
+              <Button label="Nous écrire" variant="black" />
+              <Button label="Découvrir le SAAS" variant="gradient" />
             </div>
           </div>
         </div>
