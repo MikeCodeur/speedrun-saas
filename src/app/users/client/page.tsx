@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 
 type User = {
   id: number
@@ -13,7 +13,7 @@ type User = {
   ville: string
 }
 
-export default function UsersClientPage() {
+function UsersClientContent() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -272,5 +272,19 @@ export default function UsersClientPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function UsersClientPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen p-8 pb-20 sm:p-20">
+          <div className="max-w-4xl mx-auto">Chargement...</div>
+        </div>
+      }
+    >
+      <UsersClientContent />
+    </Suspense>
   )
 }
