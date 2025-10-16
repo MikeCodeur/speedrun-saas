@@ -75,6 +75,32 @@ export default function Home() {
             </Link>
           </div>
         </div>
+
+        <div className="flex flex-col gap-4 w-full max-w-md">
+          <h2 className="text-xl font-semibold text-center">
+            Test Search Params
+          </h2>
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/users?sexe=F&ville=Paris"
+              className="rounded-lg border border-solid border-blue-500/30 dark:border-blue-400/30 transition-colors flex items-center justify-center hover:bg-blue-500/10 dark:hover:bg-blue-400/10 hover:border-blue-500/50 font-medium text-sm sm:text-base h-12 px-6"
+            >
+              Femmes à Paris (Server-Side)
+            </Link>
+            <Link
+              href="/users?age=28&sexe=M"
+              className="rounded-lg border border-solid border-blue-500/30 dark:border-blue-400/30 transition-colors flex items-center justify-center hover:bg-blue-500/10 dark:hover:bg-blue-400/10 hover:border-blue-500/50 font-medium text-sm sm:text-base h-12 px-6"
+            >
+              Hommes de 28 ans (Server-Side)
+            </Link>
+            <Link
+              href="/users/client?ville=Lyon"
+              className="rounded-lg border border-solid border-green-500/30 dark:border-green-400/30 transition-colors flex items-center justify-center hover:bg-green-500/10 dark:hover:bg-green-400/10 hover:border-green-500/50 font-medium text-sm sm:text-base h-12 px-6"
+            >
+              Utilisateurs à Lyon (Client-Side)
+            </Link>
+          </div>
+        </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
