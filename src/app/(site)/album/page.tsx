@@ -13,7 +13,7 @@ interface Album {
 
 async function getPhotos(): Promise<Photo[]> {
   const res = await fetch('https://jsonplaceholder.typicode.com/photos')
-  console.log(res)
+
   if (!res.ok) {
     throw new Error('Failed to fetch photos')
   }
