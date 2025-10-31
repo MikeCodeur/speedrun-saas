@@ -4,6 +4,7 @@ export default async function UserPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  console.log('>>>>user page', id)
 
   return (
     <div className="p-8">

@@ -23,6 +23,8 @@ function UsersClientContent() {
   const [sexe, setSexe] = useState('')
   const [ville, setVille] = useState('')
 
+  console.log('>>>>users client page')
+
   // Simuler des données utilisateurs
   const allUsers: User[] = [
     {
