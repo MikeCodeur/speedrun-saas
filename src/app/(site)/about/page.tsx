@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Buttonold'
 
 export default function Page() {
   // console.log(name)
@@ -58,8 +58,8 @@ export default function Page() {
               </p>
             </div>
             <div className="flex gap-3">
-              <Button label="Nous écrire" variant="black" />
-              <Button label="Découvrir le SAAS" variant="gradient" />
+              <Button variant="default">Nous écrire</Button>
+              <Button variant="secondary">Découvrir le SAAS</Button>
             </div>
           </div>
         </div>
