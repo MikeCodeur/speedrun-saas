@@ -1,3 +1,8 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { getCurrentUser } from '@/lib/auth'
 import { AppSidebar } from '@/components/app-sidebar'
 import { ChartAreaInteractive } from '@/components/chart-area-interactive'
 import { DataTable } from '@/components/data-table'
@@ -8,6 +13,41 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import data from './data.json'
 
 export default function Page() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+
+  useEffect(() => {
+    async function checkAuth() {
+      const user = await getCurrentUser()
+
+      if (!user) {
+        // Pas d'utilisateur connecté, rediriger vers login
+        router.push('/login')
+        return
+      }
+
+      setIsAuthenticated(true)
+      setLoading(false)
+    }
+
+    checkAuth()
+  }, [router])
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg">Chargement...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return null // Le useEffect redirige déjà vers /login
+  }
+
   return (
     <SidebarProvider
       style={

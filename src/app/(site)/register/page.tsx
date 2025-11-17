@@ -23,6 +23,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { registerAction } from './action'
+import Link from 'next/link'
 
 // Schéma de validation Zod
 const registerSchema = z
@@ -249,6 +250,18 @@ export default function RegisterPage() {
               </Button>
             </form>
           </Form>
+
+          <div className="mt-4 text-center text-sm">
+            <p className="text-muted-foreground">
+              Vous avez déjà un compte ?{' '}
+              <Link
+                href="/login"
+                className="text-primary underline-offset-4 hover:underline"
+              >
+                Se connecter
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>

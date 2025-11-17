@@ -7,6 +7,28 @@
       "email": "user@gmail.com",
       "password": "Azerty123@",
       "createdAt": "2025-11-17T08:50:33.333Z"
+    },
+    {
+      "id": "84df5d8c-4ca0-407f-896b-b27c589c649f",
+      "firstName": "zefrzerezr",
+      "lastName": "zerzerze",
+      "email": "admin@gmail.com",
+      "password": "Azerty123@",
+      "createdAt": "2025-11-17T09:29:47.220Z"
+    }
+  ],
+  "sessions": [
+    {
+      "token": "07984067-c558-44ac-9514-449c70ac67e0-1763370577902-86a580d6-57e8-49a2-af93-885ba0a6edb6",
+      "userId": "07984067-c558-44ac-9514-449c70ac67e0",
+      "createdAt": "2025-11-17T09:09:37.902Z",
+      "expiresAt": "2025-11-24T09:09:37.902Z"
+    },
+    {
+      "token": "07984067-c558-44ac-9514-449c70ac67e0-1763370913824-f8c4ecea-dae9-41a6-b4a5-486773b11609",
+      "userId": "07984067-c558-44ac-9514-449c70ac67e0",
+      "createdAt": "2025-11-17T09:15:13.824Z",
+      "expiresAt": "2025-11-24T09:15:13.824Z"
     }
   ]
 }
