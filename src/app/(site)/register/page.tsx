@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -21,6 +22,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { registerAction } from './action'
 
 // Schéma de validation Zod
 const registerSchema = z
@@ -79,6 +81,12 @@ const registerSchema = z
 type RegisterFormValues = z.infer<typeof registerSchema>
 
 export default function RegisterPage() {
+  const [message, setMessage] = useState<{
+    type: 'success' | 'error'
+    text: string
+  } | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   // 1. Définir le formulaire
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -92,10 +100,34 @@ export default function RegisterPage() {
   })
 
   // 2. Définir un gestionnaire de soumission
-  function onSubmit(values: RegisterFormValues) {
-    // Ici vous pourrez ajouter la logique backend plus tard
-    console.log('Valeurs du formulaire:', values)
-    // TODO: Envoyer les données au serveur
+  async function onSubmit(values: RegisterFormValues) {
+    setIsSubmitting(true)
+    setMessage(null)
+
+    const formData = new FormData()
+    formData.append('firstName', values.firstName)
+    formData.append('lastName', values.lastName)
+    formData.append('email', values.email)
+    formData.append('password', values.password)
+    formData.append('confirmPassword', values.confirmPassword)
+
+    try {
+      const result = await registerAction(formData)
+
+      if (result.success) {
+        setMessage({ type: 'success', text: result.message })
+        form.reset()
+      } else {
+        setMessage({ type: 'error', text: result.message })
+      }
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: 'Une erreur est survenue lors de la création du compte',
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -108,6 +140,17 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {message && (
+            <div
+              className={`mb-4 rounded-md p-4 ${
+                message.type === 'success'
+                  ? 'bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                  : 'bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+              }`}
+            >
+              {message.text}
+            </div>
+          )}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {/* Prénom */}
@@ -201,8 +244,8 @@ export default function RegisterPage() {
                 )}
               />
 
-              <Button type="submit" className="w-full">
-                Créer mon compte
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? 'Création en cours...' : 'Créer mon compte'}
               </Button>
             </form>
           </Form>
