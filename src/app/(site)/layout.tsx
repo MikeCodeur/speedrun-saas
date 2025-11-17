@@ -19,6 +19,9 @@ export default function SiteLayout({
             <Link href="/about" className="text-white/80 hover:text-white">
               À propos
             </Link>
+            <Link href="/8bit" className="text-white/80 hover:text-white">
+              8bit
+            </Link>
             <Link href="/terms" className="text-white/80 hover:text-white">
               Conditions
             </Link>
