@@ -5,12 +5,11 @@ import Link from 'next/link'
 import { useState, useEffect, Suspense } from 'react'
 
 type User = {
-  id: number
-  nom: string
-  prenom: string
-  age: number
-  sexe: 'M' | 'F'
-  ville: string
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  createdAt: string
 }
 
 function UsersClientContent() {
@@ -19,64 +18,30 @@ function UsersClientContent() {
   const searchParams = useSearchParams()
 
   const [nom, setNom] = useState('')
-  const [age, setAge] = useState('')
-  const [sexe, setSexe] = useState('')
-  const [ville, setVille] = useState('')
+  const [email, setEmail] = useState('')
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
 
-  console.log('>>>>users client page')
-
-  // Simuler des données utilisateurs
-  const allUsers: User[] = [
-    {
-      id: 1,
-      nom: 'Dupont',
-      prenom: 'Marie',
-      age: 28,
-      sexe: 'F',
-      ville: 'Paris',
-    },
-    { id: 2, nom: 'Martin', prenom: 'Jean', age: 35, sexe: 'M', ville: 'Lyon' },
-    {
-      id: 3,
-      nom: 'Bernard',
-      prenom: 'Sophie',
-      age: 42,
-      sexe: 'F',
-      ville: 'Paris',
-    },
-    {
-      id: 4,
-      nom: 'Dubois',
-      prenom: 'Pierre',
-      age: 28,
-      sexe: 'M',
-      ville: 'Marseille',
-    },
-    {
-      id: 5,
-      nom: 'Thomas',
-      prenom: 'Claire',
-      age: 31,
-      sexe: 'F',
-      ville: 'Lyon',
-    },
-    { id: 6, nom: 'Petit', prenom: 'Luc', age: 35, sexe: 'M', ville: 'Paris' },
-    {
-      id: 7,
-      nom: 'Robert',
-      prenom: 'Emma',
-      age: 26,
-      sexe: 'F',
-      ville: 'Marseille',
-    },
-  ]
+  // Charger les utilisateurs depuis l'API
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch('/api/users')
+        const data = await response.json()
+        setUsers(data)
+      } catch (error) {
+        console.error('Erreur lors du chargement des utilisateurs:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchUsers()
+  }, [])
 
   // Synchroniser les states avec les URL search params au chargement
   useEffect(() => {
     setNom(searchParams.get('nom') || '')
-    setAge(searchParams.get('age') || '')
-    setSexe(searchParams.get('sexe') || '')
-    setVille(searchParams.get('ville') || '')
+    setEmail(searchParams.get('email') || '')
   }, [searchParams])
 
   // Mettre à jour les URL search params
@@ -93,24 +58,29 @@ function UsersClientContent() {
   }
 
   // Filtrer les utilisateurs
-  const filteredUsers = allUsers.filter((user) => {
-    if (nom && !user.nom.toLowerCase().includes(nom.toLowerCase())) return false
-    if (age && user.age !== parseInt(age)) return false
-    if (sexe && user.sexe !== sexe.toUpperCase()) return false
-    if (ville && !user.ville.toLowerCase().includes(ville.toLowerCase()))
-      return false
+  const filteredUsers = users.filter((user) => {
+    if (nom && !user.lastName.toLowerCase().includes(nom.toLowerCase())) return false
+    if (email && !user.email.toLowerCase().includes(email.toLowerCase())) return false
     return true
   })
 
   const handleReset = () => {
     setNom('')
-    setAge('')
-    setSexe('')
-    setVille('')
+    setEmail('')
     router.push(pathname, { scroll: false })
   }
 
-  const hasActiveFilters = nom || age || sexe || ville
+  const hasActiveFilters = nom || email
+
+  if (loading) {
+    return (
+      <div className="min-h-screen p-8 pb-20 sm:p-20">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-center py-8 opacity-50">Chargement des utilisateurs...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen p-8 pb-20 sm:p-20">
@@ -121,7 +91,7 @@ function UsersClientContent() {
           </h1>
           <p className="text-sm opacity-70">
             Cet exemple utilise un Client Component avec useSearchParams() pour
-            gérer les filtres
+            gérer les filtres et fetch() pour charger les données
           </p>
           <Link
             href="/"
@@ -134,7 +104,7 @@ function UsersClientContent() {
         {/* Formulaire de filtres */}
         <div className="mb-8 p-6 rounded-lg border border-foreground/10 bg-foreground/5">
           <h2 className="font-semibold mb-4">Filtrer les utilisateurs :</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="nom" className="block text-sm font-medium mb-2">
                 Nom
@@ -147,60 +117,24 @@ function UsersClientContent() {
                   setNom(e.target.value)
                   updateSearchParams('nom', e.target.value)
                 }}
-                placeholder="Rechercher..."
+                placeholder="Rechercher par nom..."
                 className="w-full px-3 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
               />
             </div>
 
             <div>
-              <label htmlFor="age" className="block text-sm font-medium mb-2">
-                Âge
+              <label htmlFor="email" className="block text-sm font-medium mb-2">
+                Email
               </label>
               <input
-                id="age"
-                type="number"
-                value={age}
-                onChange={(e) => {
-                  setAge(e.target.value)
-                  updateSearchParams('age', e.target.value)
-                }}
-                placeholder="Ex: 28"
-                className="w-full px-3 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="sexe" className="block text-sm font-medium mb-2">
-                Sexe
-              </label>
-              <select
-                id="sexe"
-                value={sexe}
-                onChange={(e) => {
-                  setSexe(e.target.value)
-                  updateSearchParams('sexe', e.target.value)
-                }}
-                className="w-full px-3 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
-              >
-                <option value="">Tous</option>
-                <option value="M">Homme</option>
-                <option value="F">Femme</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="ville" className="block text-sm font-medium mb-2">
-                Ville
-              </label>
-              <input
-                id="ville"
+                id="email"
                 type="text"
-                value={ville}
+                value={email}
                 onChange={(e) => {
-                  setVille(e.target.value)
-                  updateSearchParams('ville', e.target.value)
+                  setEmail(e.target.value)
+                  updateSearchParams('email', e.target.value)
                 }}
-                placeholder="Ex: Paris"
+                placeholder="Rechercher par email..."
                 className="w-full px-3 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
               />
             </div>
@@ -247,14 +181,14 @@ function UsersClientContent() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-semibold">
-                        {user.prenom} {user.nom}
+                        {user.firstName} {user.lastName}
                       </h3>
-                      <p className="text-sm opacity-70 mt-1">
-                        {user.age} ans • {user.sexe === 'M' ? 'Homme' : 'Femme'}{' '}
-                        • {user.ville}
+                      <p className="text-sm opacity-70 mt-1">{user.email}</p>
+                      <p className="text-xs opacity-50 mt-1">
+                        Inscrit le {new Date(user.createdAt).toLocaleDateString('fr-FR')}
                       </p>
                     </div>
-                    <div className="text-sm opacity-50">ID: {user.id} →</div>
+                    <div className="text-sm opacity-50">→</div>
                   </div>
                 </Link>
               ))}
