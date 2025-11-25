@@ -1,10 +1,9 @@
 import Link from 'next/link'
+import { getAllUsers } from '@/lib/db'
 
 type SearchParams = Promise<{
   nom?: string
-  age?: string
-  sexe?: string
-  ville?: string
+  email?: string
 }>
 
 type Props = {
@@ -13,52 +12,15 @@ type Props = {
 
 export default async function UsersPage({ searchParams }: Props) {
   const params = await searchParams
-  const { nom, age, sexe, ville } = params
+  const { nom, email } = params
 
-  // Simuler des données utilisateurs filtrées
-  const allUsers = [
-    {
-      id: 1,
-      nom: 'Dupont',
-      prenom: 'Marie',
-      age: 28,
-      sexe: 'F',
-      ville: 'Paris',
-    },
-    { id: 2, nom: 'Martin', prenom: 'Jean', age: 35, sexe: 'M', ville: 'Lyon' },
-    {
-      id: 3,
-      nom: 'Bernard',
-      prenom: 'Sophie',
-      age: 42,
-      sexe: 'F',
-      ville: 'Paris',
-    },
-    {
-      id: 4,
-      nom: 'Dubois',
-      prenom: 'Pierre',
-      age: 28,
-      sexe: 'M',
-      ville: 'Marseille',
-    },
-    {
-      id: 5,
-      nom: 'Thomas',
-      prenom: 'Claire',
-      age: 31,
-      sexe: 'F',
-      ville: 'Lyon',
-    },
-  ]
+  // Récupérer les utilisateurs depuis la base de données
+  const allUsers = await getAllUsers()
 
   // Filtrer les utilisateurs selon les search params
   const filteredUsers = allUsers.filter((user) => {
-    if (nom && !user.nom.toLowerCase().includes(nom.toLowerCase())) return false
-    if (age && user.age !== parseInt(age)) return false
-    if (sexe && user.sexe !== sexe.toUpperCase()) return false
-    if (ville && !user.ville.toLowerCase().includes(ville.toLowerCase()))
-      return false
+    if (nom && !user.lastName.toLowerCase().includes(nom.toLowerCase())) return false
+    if (email && !user.email.toLowerCase().includes(email.toLowerCase())) return false
     return true
   })
 
@@ -82,7 +44,7 @@ export default async function UsersPage({ searchParams }: Props) {
         </div>
 
         {/* Filtres actifs */}
-        {(nom || age || sexe || ville) && (
+        {(nom || email) && (
           <div className="mb-6 p-4 rounded-lg border border-foreground/10 bg-foreground/5">
             <h2 className="font-semibold mb-2">Filtres actifs :</h2>
             <div className="flex flex-wrap gap-2">
@@ -91,19 +53,9 @@ export default async function UsersPage({ searchParams }: Props) {
                   Nom: {nom}
                 </span>
               )}
-              {age && (
+              {email && (
                 <span className="px-3 py-1 rounded-full text-sm bg-foreground/10">
-                  Âge: {age}
-                </span>
-              )}
-              {sexe && (
-                <span className="px-3 py-1 rounded-full text-sm bg-foreground/10">
-                  Sexe: {sexe}
-                </span>
-              )}
-              {ville && (
-                <span className="px-3 py-1 rounded-full text-sm bg-foreground/10">
-                  Ville: {ville}
+                  Email: {email}
                 </span>
               )}
               <Link
@@ -121,34 +73,22 @@ export default async function UsersPage({ searchParams }: Props) {
           <h2 className="font-semibold mb-4">Exemples de filtres :</h2>
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/users?sexe=F"
+              href="/users?nom=dupont"
               className="px-4 py-2 rounded-lg bg-foreground/10 hover:bg-foreground/20 transition-colors text-sm"
             >
-              Femmes
+              Nom: Dupont
             </Link>
             <Link
-              href="/users?age=28"
+              href="/users?email=gmail"
               className="px-4 py-2 rounded-lg bg-foreground/10 hover:bg-foreground/20 transition-colors text-sm"
             >
-              28 ans
+              Email Gmail
             </Link>
             <Link
-              href="/users?ville=Paris"
+              href="/users?email=example"
               className="px-4 py-2 rounded-lg bg-foreground/10 hover:bg-foreground/20 transition-colors text-sm"
             >
-              Paris
-            </Link>
-            <Link
-              href="/users?sexe=M&age=28"
-              className="px-4 py-2 rounded-lg bg-foreground/10 hover:bg-foreground/20 transition-colors text-sm"
-            >
-              Hommes de 28 ans
-            </Link>
-            <Link
-              href="/users?ville=Lyon&sexe=F"
-              className="px-4 py-2 rounded-lg bg-foreground/10 hover:bg-foreground/20 transition-colors text-sm"
-            >
-              Femmes de Lyon
+              Email Example
             </Link>
           </div>
         </div>
@@ -174,14 +114,14 @@ export default async function UsersPage({ searchParams }: Props) {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-semibold">
-                        {user.prenom} {user.nom}
+                        {user.firstName} {user.lastName}
                       </h3>
-                      <p className="text-sm opacity-70 mt-1">
-                        {user.age} ans • {user.sexe === 'M' ? 'Homme' : 'Femme'}{' '}
-                        • {user.ville}
+                      <p className="text-sm opacity-70 mt-1">{user.email}</p>
+                      <p className="text-xs opacity-50 mt-1">
+                        Inscrit le {new Date(user.createdAt).toLocaleDateString('fr-FR')}
                       </p>
                     </div>
-                    <div className="text-sm opacity-50">ID: {user.id} →</div>
+                    <div className="text-sm opacity-50">→</div>
                   </div>
                 </Link>
               ))}
